@@ -5,213 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Канон 50 книг | Персональный навигатор</title>
-  <style>
-    :root[data-theme="dark"] {
-      --bg: #0b0f19;
-      --surface: #131b2e;
-      --surface-hover: #1c2742;
-      --border: #26334d;
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.15);
-      --success: #10b981;
-      --warning: #f59e0b;
-      --badge-bg: #1e293b;
-    }
-    :root[data-theme="light"] {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-hover: #f1f5f9;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --accent: #0284c7;
-      --accent-glow: rgba(2, 132, 199, 0.1);
-      --success: #059669;
-      --warning: #d97706;
-      --badge-bg: #f1f5f9;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 60px;
-      transition: background 0.2s, color 0.2s;
-    }
-    .container { max-width: 1360px; margin: 0 auto; padding: 20px 16px; }
-    header {
-      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-      gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
-    }
-    .title-group h1 {
-      font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em;
-      background: linear-gradient(90deg, var(--accent), #a855f7);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .title-group p { font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; }
-    .top-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-    button, select, input {
-      font: inherit; color: var(--text); background: var(--surface);
-      border: 1px solid var(--border); border-radius: 10px;
-      padding: 8px 12px; font-size: 0.875rem; outline: none; transition: all 0.15s;
-    }
-    button { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
-    button:hover, select:hover { border-color: var(--accent); background: var(--surface-hover); }
-    button.active-view { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
-
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px; margin-bottom: 20px;
-    }
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px;
-    }
-    .stat-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
-    .stat-value { font-size: 1.65rem; font-weight: 800; margin-top: 4px; color: var(--text); }
-    .stat-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-    .progress-bar-wrap { width: 100%; height: 8px; background: var(--badge-bg); border-radius: 999px; overflow: hidden; margin-top: 10px; }
-    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: width 0.3s ease; }
-
-    .filters-bar {
-      display: grid; grid-template-columns: 1.5fr repeat(3, 1fr);
-      gap: 10px; margin-bottom: 20px; background: var(--surface);
-      padding: 14px; border-radius: 14px; border: 1px solid var(--border);
-    }
-    @media (max-width: 860px) { .filters-bar { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .filters-bar { grid-template-columns: 1fr; } }
-
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
-    @media (max-width: 420px) { .cards-grid { grid-template-columns: 1fr; } }
-    .book-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      padding: 18px; display: flex; flex-direction: column; justify-content: space-between;
-      gap: 12px; transition: border-color 0.15s;
-    }
-    .book-card:hover { border-color: var(--accent); }
-    .book-card.status-done { border-left: 4px solid var(--success); }
-    .book-card.status-reading { border-left: 4px solid var(--warning); }
-    .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-    .badge { font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: var(--badge-bg); color: var(--text-muted); }
-    .badge-rot { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); }
-    .book-title { font-size: 1.15rem; font-weight: 800; margin-top: 6px; }
-    .book-author { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
-    .book-idea { font-size: 0.88rem; color: var(--text); background: var(--badge-bg); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent); }
-    .meta-box { font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; }
-    .meta-box strong { color: var(--text); }
-    .card-controls { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .control-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .status-select { flex: 1; font-weight: 700; }
-    .status-select.val-done { color: var(--success); border-color: var(--success); }
-    .status-select.val-reading { color: var(--warning); border-color: var(--warning); }
-    .litres-link {
-      text-decoration: none; font-size: 0.8rem; font-weight: 700; padding: 8px 12px;
-      border-radius: 10px; background: #ff5500; color: #fff; white-space: nowrap;
-    }
-    .litres-link:hover { opacity: 0.9; }
-    .note-input {
-      width: 100%; resize: vertical; min-height: 48px; font-size: 0.82rem;
-      padding: 8px 10px; border-radius: 8px; background: var(--bg);
-      color: var(--text); border: 1px solid var(--border);
-    }
-    .stars { display: inline-flex; gap: 2px; cursor: pointer; user-select: none; }
-    .star { font-size: 1.2rem; color: var(--border); transition: color 0.1s; }
-    .star.active { color: #fbbf24; }
-
-    /* Table View */
-    .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
-    th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    th { background: var(--badge-bg); color: var(--text-muted); font-weight: 700; position: sticky; top: 0; white-space: nowrap; }
-    tr:hover td { background: var(--surface-hover); }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div class="title-group">
-        <h1>Канон: 50 главных книг жизни</h1>
-        <p>Интерактивный трекер • ЛитРес Гид • Ротация нагрузки</p>
-      </div>
-      <div class="top-actions">
-        <button id="viewCardsBtn" class="active-view" onclick="setView('cards')">🗂 Карточки</button>
-        <button id="viewTableBtn" onclick="setView('table')">📊 Таблица</button>
-        <button onclick="toggleTheme()">☀️ / 🌙</button>
-        <button onclick="exportBackup()">💾 Бэкап</button>
-        <button onclick="document.getElementById('importFile').click()">📂 Импорт</button>
-        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importBackup(event)">
-      </div>
-    </header>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Прогресс канона</div>
-        <div class="stat-value" id="statRead">0 / 50</div>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="statBar"></div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Сейчас в чтении</div>
-        <div class="stat-value" id="statReading">0</div>
-        <div class="stat-sub" id="statNextBook">Следующая: #1</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Освоено часов</div>
-        <div class="stat-value" id="statHours">0 / 710 ч</div>
-        <div class="stat-sub">Полный курс чтения</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Средняя оценка</div>
-        <div class="stat-value" id="statRating">— ★</div>
-        <div class="stat-sub">Личный рейтинг</div>
-      </div>
-    </div>
-
-    <div class="filters-bar">
-      <input type="text" id="searchInput" placeholder="🔍 Поиск по названию, автору, переводчику, чтецу..." oninput="render()">
-      <select id="catFilter" onchange="render()">
-        <option value="all">Все смысловые блоки (7)</option>
-        <option value="I. Античность и Ренессанс">I. Античность и Ренессанс</option>
-        <option value="II. Русская классика">II. Русская классика</option>
-        <option value="III. Мировая классика XIX в.">III. Мировая классика XIX в.</option>
-        <option value="IV. XX век: экзистенциализм и модернизм">IV. XX век: экзистенциализм и модернизм</option>
-        <option value="V. Постмодерн и магический реализм">V. Постмодерн и магический реализм</option>
-        <option value="VI. Антиутопии и фантастика">VI. Антиутопии и фантастика</option>
-        <option value="VII. Фундаментальный нон-фикшн">VII. Фундаментальный нон-фикшн</option>Сергей Юрьевич, для запуска вашей интерактивной таблицы как полноценного сайта на **GitHub Pages** я доработал код до финальной версии **`index.html`**: теперь в нем есть мгновенный переключатель между **режимом карточек** (для телефона и планшета) и **режимом полной интерактивной таблицы на 13 столбцов** (для широкого экрана), а также прямая кнопка поиска каждой книги на ЛитРес и синхронизация прогресса через JSON.
-
----
-
-### Как развернуть сайт на GitHub Pages за 2 минуты
-
-Поскольку прямой записи в ваш аккаунт GitHub из чата нет, публикация выполняется через стандартный веб-интерфейс GitHub в 4 шага:
-
-1. **Создайте репозиторий:**
-   Откройте [github.com/new](https://github.com/new), в поле **Repository name** введите, например, `CanonBooks` (или `Books50`), оставьте статус **Public**, поставьте галочку **Add a README file** и нажмите **Create repository**.
-2. **Создайте главный файл сайта:**
-   Внутри созданного репозитория нажмите кнопку **Add file** → **Create new file**. В поле имени файла введите строго **`index.html`**.
-3. **Вставьте код:**
-   Нажмите кнопку «Копировать» в правом верхнем углу блока кода ниже, вставьте его в редактор на GitHub и нажмите зеленую кнопку **Commit changes...** (дважды).
-4. **Включите GitHub Pages:**
-   Перейдите во вкладку **Settings** (в верхнем меню репозитория) → в левой колонке выберите **Pages** → в разделе **Build and deployment** (Branch) переключите `None` на **`main`** (папка `/root`) и нажмите **Save**.
-
-Через 40–60 секунд ваш персональный сайт-трекер будет доступен с любого устройства по постоянной ссылке:
-`https://Recardo9999.github.io/CanonBooks/`
-
----
-
-### Финальный код `index.html` (Вид «Карточки + Таблица» + ЛитРес + Бэкап)
-
-Эта версия построена на базе сохраненного исходного кода с вашего Диска[span_0](start_span)[span_0](end_span) и дополнена табличным режимом отображения всех 13 столбцов:
-
-```html
-<!DOCTYPE html>
-<html lang="ru" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Канон: 50 главных книг жизни</title>
   <style>
     :root[data-theme="dark"] {
@@ -249,252 +42,86 @@
       padding-bottom: 60px;
       transition: background 0.2s, color 0.2s;
     }
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px 16px;
-    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px 16px; }
     header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
     }
     .title-group h1 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em;
       background: linear-gradient(90deg, var(--accent), #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .title-group p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-    .top-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .title-group p { font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; }
+    .top-actions { display: flex; flex-wrap: wrap; gap: 8px; }
     button, select, input {
-      font: inherit;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.875rem;
-      outline: none;
-      transition: all 0.15s;
+      font: inherit; color: var(--text); background: var(--surface);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 8px 12px; font-size: 0.875rem; outline: none; transition: all 0.15s;
     }
-    button {
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-    }
-    button:hover, select:hover {
-      border-color: var(--accent);
-      background: var(--surface-hover);
-    }
-    button.active-view {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-      color: var(--accent);
-    }
+    button { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+    button:hover, select:hover { border-color: var(--accent); background: var(--surface-hover); }
+    button.active-view { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
     .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-bottom: 20px;
     }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px;
     }
-    .stat-label {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    .stat-value {
-      font-size: 1.65rem;
-      font-weight: 800;
-      margin-top: 4px;
-    }
-    .stat-sub {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-    .progress-bar-wrap {
-      width: 100%;
-      height: 8px;
-      background: var(--badge-bg);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--success));
-      width: 0%;
-      transition: width 0.3s ease;
-    }
+    .stat-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
+    .stat-value { font-size: 1.65rem; font-weight: 800; margin-top: 4px; }
+    .stat-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+    .progress-bar-wrap { width: 100%; height: 8px; background: var(--badge-bg); border-radius: 999px; overflow: hidden; margin-top: 10px; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: width 0.3s ease; }
     .filters-bar {
-      display: grid;
-      grid-template-columns: 1.5fr repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-      background: var(--surface);
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
+      display: grid; grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 10px; margin-bottom: 20px; background: var(--surface);
+      padding: 14px; border-radius: 14px; border: 1px solid var(--border);
     }
-    @media (max-width: 900px) {
-      .filters-bar { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 540px) {
-      .filters-bar { grid-template-columns: 1fr; }
-    }
-    /* Сетка карточек */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 16px;
-    }
-    @media (max-width: 420px) {
-      .cards-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .filters-bar { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 540px) { .filters-bar { grid-template-columns: 1fr; } }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+    @media (max-width: 420px) { .cards-grid { grid-template-columns: 1fr; } }
     .book-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-      transition: border-color 0.15s;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 18px; display: flex; flex-direction: column; justify-content: space-between;
+      gap: 12px; transition: border-color 0.15s;
     }
     .book-card:hover { border-color: var(--accent); }
     .book-card.status-done { border-left: 4px solid var(--success); }
     .book-card.status-reading { border-left: 4px solid var(--warning); }
     .badges { display: flex; flex-wrap: wrap; gap: 6px; }
-    .badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: var(--badge-bg);
-      color: var(--text-muted);
-    }
-    .badge-rot {
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-    }
+    .badge { font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: var(--badge-bg); color: var(--text-muted); }
+    .badge-rot { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); }
     .book-title { font-size: 1.15rem; font-weight: 800; margin-top: 6px; }
     .book-author { font-size: 0.9rem; color: var(--accent); font-weight: 600; }
-    .book-idea {
-      font-size: 0.88rem;
-      background: var(--badge-bg);
-      padding: 10px 12px;
-      border-radius: 10px;
-      border-left: 3px solid var(--accent);
-    }
-    .meta-box {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .book-idea { font-size: 0.88rem; background: var(--badge-bg); padding: 10px 12px; border-radius: 10px; border-left: 3px solid var(--accent); }
+    .meta-box { font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; }
     .meta-box strong { color: var(--text); }
-    .card-controls {
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .control-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
+    .card-controls { border-top: 1px solid var(--border); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .control-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
     .status-select { flex: 1; font-weight: 700; }
     .status-select.val-done { color: var(--success); border-color: var(--success); }
     .status-select.val-reading { color: var(--warning); border-color: var(--warning); }
     .litres-link {
-      text-decoration: none;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 7px 11px;
-      border-radius: 8px;
-      background: #ff5500;
-      color: #fff;
-      white-space: nowrap;
-      display: inline-block;
+      text-decoration: none; font-size: 0.78rem; font-weight: 700; padding: 7px 11px;
+      border-radius: 8px; background: #ff5500; color: #fff; white-space: nowrap; display: inline-block;
     }
     .litres-link:hover { opacity: 0.9; }
     .note-input {
-      width: 100%;
-      resize: vertical;
-      min-height: 48px;
-      font-size: 0.82rem;
-      padding: 8px 10px;
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      border: 1px solid var(--border);
+      width: 100%; resize: vertical; min-height: 48px; font-size: 0.82rem;
+      padding: 8px 10px; border-radius: 8px; background: var(--bg);
+      color: var(--text); border: 1px solid var(--border);
     }
     .stars { display: inline-flex; gap: 2px; cursor: pointer; user-select: none; }
     .star { font-size: 1.15rem; color: var(--border); }
     .star.active { color: #fbbf24; }
-
-    /* Табличный вид */
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1150px;
-      font-size: 0.84rem;
-    }
-    th, td {
-      padding: 10px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-    }
-    th {
-      background: var(--badge-bg);
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
+    .table-wrap { width: 100%; overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1150px; font-size: 0.84rem; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--badge-bg); color: var(--text-muted); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; position: sticky; top: 0; z-index: 2; }
     tr:hover td { background: var(--surface-hover); }
     tr.row-done td { border-left: 3px solid var(--success); }
     tr.row-reading td { border-left: 3px solid var(--warning); }
@@ -510,6 +137,42 @@
       <div class="top-actions">
         <button id="viewCardsBtn" class="active-view" onclick="setView('cards')">🗂 Карточки</button>
         <button id="viewTableBtn" onclick="setView('table')">📊 Таблица</button>
-        <button onclick="toggleTheme()">☀️ / 🌙 Тема</button>
-        <button onclick="exportBackup()">💾 Бэкап (.json)</button>
-        <button onclick="do
+        <button type="button" onclick="toggleTheme()">☀️ / 🌙 Тема</button>
+        <button type="button" onclick="exportBackup()">💾 Бэкап (.json)</button>
+        <button type="button" onclick="document.getElementById('importFile').click()">📂 Загрузить</button>
+        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importBackup(event)">
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Прогресс канона</div>
+        <div class="stat-value" id="statRead">0 / 50</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="statBar"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Сейчас читаю</div>
+        <div class="stat-value" id="statReading">0</div>
+        <div class="stat-sub" id="statNextBook">Следующая: #1 по ротации</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Освоено времени</div>
+        <div class="stat-value" id="statHours">0 / 710 ч</div>
+        <div class="stat-sub">При среднем темпе 45 мин/день</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Средняя оценка</div>
+        <div class="stat-value" id="statRating">— ★</div>
+        <div class="stat-sub">По прочитанным книгам</div>
+      </div>
+    </div>
+
+    <div class="filters-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Поиск по названию, автору, чтецу или идее..." oninput="renderBooks()">
+      <select id="catFilter" onchange="renderBooks()">
+        <option value="all">Все смысловые блоки (7)</option>
+        <option value="I. Античность и Ренессанс">I. Античность и Ренессанс</option>
+        <option value="II. Русская классика">II. Русская классика</option>
+        <option value="III. Мировая классика XIX в.">III. Мировая классика XIX в.</option>
+        <option value="IV. XX век
+          
