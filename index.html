@@ -189,4 +189,303 @@
         box.style.display = "block";
         box.innerText = "Ошибка скрипта (строка " + line + "): " + msg;
       }
-      
+    };
+
+    var BOOKS = [
+      {canon:44, rot:1, cat:"VI. Антиутопии и фантастика", author:"Рэй Брэдбери", title:"451 градус по Фаренгейту", year:"1953", diff:1, hours:4, trans:"пер. Т. Н. Шинкарь", litres:"Текст: Эксмо | Аудио: С. Чонишвили / И. Князев", idea:"Вытеснение сложного мышления быстрым развлечением"},
+      {canon:49, rot:2, cat:"VII. Фундаментальный нон-фикшн", author:"Виктор Франкл", title:"Сказать жизни „Да!“", year:"1946", diff:1, hours:4, trans:"пер. Д. Орловой, Д. Леонтьева", litres:"Текст: Альпина нон-фикшн | Аудио: К. Корольков", idea:"Наличие смысла как главный ресурс выживания личности"},
+      {canon:31, rot:3, cat:"IV. XX век: экзистенциализм и модернизм", author:"Михаил Булгаков", title:"Мастер и Маргарита", year:"1940", diff:2, hours:12, trans:"Полная ред. Е. С. Булгаковой", litres:"Текст: Азбука | Аудио: А. Клюквин, Д. Мороз, М. Суханов", idea:"Сатира, трусость, природа власти и внутренняя свобода"},
+      {canon:43, rot:4, cat:"VI. Антиутопии и фантастика", author:"Джордж Оруэлл", title:"1984", year:"1949", diff:2, hours:8, trans:"пер. В. П. Голышева", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: А. Клюквин / С. Чонишвили", idea:"Механика тоталитарного контроля над сознанием и языком"},
+      {canon:8, rot:5, cat:"II. Русская классика", author:"Михаил Лермонтов", title:"Герой нашего времени", year:"1840", diff:2, hours:5, trans:"Академическая ред. с предисловием", litres:"Текст: Азбука / Эксмо | Аудио: В. Антоник / А. Клюквин", idea:"Психологический анализ холодного ума и манипуляции"},
+      {canon:11, rot:6, cat:"II. Русская классика", author:"Фёдор Достоевский", title:"Преступление и наказание", year:"1866", diff:3, hours:16, trans:"Академическая ред. с примечаниями", litres:"Текст: Азбука-Классика | Аудио: А. Клюквин", idea:"Лабораторная проверка идеи «крови по совести»"},
+      {canon:34, rot:7, cat:"IV. XX век: экзистенциализм и модернизм", author:"Эрнест Хемингуэй", title:"Старик и море", year:"1952", diff:1, hours:2.5, trans:"пер. Е. А. Голышевой и Б. Р. Изакова", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: В. Самойлов / И. Князев", idea:"Стоицизм и мужество человека перед лицом поражения"},
+      {canon:47, rot:8, cat:"VII. Фундаментальный нон-фикшн", author:"Никколо Макиавелли", title:"Государь", year:"1532", diff:2, hours:3.5, trans:"пер. Г. Д. Муравьёвой", litres:"Текст: Азбука-Классика / АСТ | Аудио: В. Левашёв / А. Клюквин", idea:"Реалистичная стратегия управления и природы власти"},
+      {canon:28, rot:9, cat:"IV. XX век: экзистенциализм и модернизм", author:"Фрэнсис Скотт Фицджеральд", title:"Великий Гэтсби", year:"1925", diff:2, hours:4, trans:"пер. Е. Д. Калашниковой", litres:"Текст: Азбука / АСТ | Аудио: И. Бобылев / А. Клюквин", idea:"Иллюзорность американской мечты и погони за прошлым"},
+      {canon:45, rot:10, cat:"VI. Антиутопии и фантастика", author:"Аркадий и Борис Стругацкие", title:"Трудно быть богом", year:"1964", diff:2, hours:5, trans:"Полная авторская ред. без купюр", litres:"Текст: АСТ | Аудио: Л. Ярмольник / В. Левашёв", idea:"Этика вмешательства и невозможность форсировать прогресс"},
+      {canon:18, rot:11, cat:"III. Мировая классика XIX в.", author:"Александр Дюма", title:"Граф Монте-Кристо", year:"1844", diff:2, hours:34, trans:"пер. В. М. Строева и Л. Н. Остроумова", litres:"Текст: Азбука / Эксмо | Аудио: И. Прудовский / И. Литвинов", idea:"Граница между возмездием и комплексом Бога"},
+      {canon:37, rot:12, cat:"V. Постмодерн и магический реализм", author:"Уильям Голдинг", title:"Повелитель мух", year:"1954", diff:2, hours:5, trans:"пер. Е. А. Суриц", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: А. Багдасаров / К. Радциг", idea:"Хрупкость цивилизационных норм без внешних сдержек"},
+      {canon:7, rot:13, cat:"II. Русская классика", author:"Александр Пушкин", title:"Евгений Онегин", year:"1831", diff:2, hours:5, trans:"Текст с комм. Ю. М. Лотмана", litres:"Текст: Азбука-Классика | Аудио: И. Смоктуновский / С. Юрский", idea:"Культурный код русского языка и тип лишнего человека"},
+      {canon:50, rot:14, cat:"VII. Фундаментальный нон-фикшн", author:"Даниэль Канеман", title:"Думай медленно… решай быстро", year:"2011", diff:3, hours:16, trans:"пер. А. Андреева (науч. ред. АСТ)", litres:"Текст: АСТ / Corpus | Аудио: В. Мичков / М. Доронин", idea:"Архитектура двух систем мышления и когнитивных ошибок"},
+      {canon:33, rot:15, cat:"IV. XX век: экзистенциализм и модернизм", author:"Джером Д. Сэлинджер", title:"Над пропастью во ржи", year:"1951", diff:1, hours:5, trans:"пер. Р. Я. Райт-Ковалёвой", litres:"Текст: Эксмо | Аудио: С. Чонишвили / А. Клюквин", idea:"Одиночество взросления и протест против фальши"},
+      {canon:10, rot:16, cat:"II. Русская классика", author:"Иван Тургенев", title:"Отцы и дети", year:"1862", diff:2, hours:6, trans:"Академическая ред. с примечаниями", litres:"Текст: Азбука / Эксмо | Аудио: И. Литвинов / А. Бордуков", idea:"Конфликт поколений и проверка нигилизма реальностью"},
+      {canon:42, rot:17, cat:"VI. Антиутопии и фантастика", author:"Олдос Хаксли", title:"О дивный новый мир", year:"1932", diff:2, hours:6, trans:"пер. О. П. Сороки", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: И. Князев / А. Багдасаров", idea:"Контроль над обществом через удовольствие и потребление"},
+      {canon:40, rot:18, cat:"V. Постмодерн и магический реализм", author:"Габриэль Гарсиа Маркес", title:"Сто лет одиночества", year:"1967", diff:3, hours:12, trans:"пер. Н. И. Бутыриной и В. С. Столбова", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: И. Князев / А. Клюквин", idea:"Магический реализм, цикличность истории и одиночество"},
+      {canon:23, rot:19, cat:"III. Мировая классика XIX в.", author:"Оскар Уайльд", title:"Портрет Дориана Грея", year:"1890", diff:2, hours:6, trans:"пер. М. Е. Абкиной", litres:"Текст: Азбука-Классика | Аудио: В. Кузнецов / А. Клюквин", idea:"Гедонизм и расщепление внешней маски и совести"},
+      {canon:29, rot:20, cat:"IV. XX век: экзистенциализм и модернизм", author:"Эрих Мария Ремарк", title:"На Западном фронте без перемен", year:"1929", diff:2, hours:6, trans:"пер. Ю. И. Архипова", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: В. Кузнецов / С. Чонишвили", idea:"Окопная правда о войне и потерянном поколении"},
+      {canon:14, rot:21, cat:"II. Русская классика", author:"Лев Толстой", title:"Анна Каренина", year:"1877", diff:3, hours:26, trans:"Классическая ред. в 8 частях", litres:"Текст: Азбука | Аудио: А. Клюквин / С. Чонишвили", idea:"Страсть, семья и социальные механизмы давления"},
+      {canon:32, rot:22, cat:"IV. XX век: экзистенциализм и модернизм", author:"Альбер Камю", title:"Посторонний / Чума", year:"1942", diff:3, hours:7, trans:"пер. Норы Галь и Н. М. Жарковой", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: А. Багдасаров / А. Клюквин", idea:"Философия абсурда и верность долгу без иллюзий"},
+      {canon:35, rot:23, cat:"IV. XX век: экзистенциализм и модернизм", author:"Харпер Ли", title:"Убить пересмешника", year:"1960", diff:2, hours:8, trans:"пер. Норы Галь и Р. Облонской", litres:"Текст: АСТ | Аудио: М. Багинская / К. Радциг", idea:"Гражданское мужество, совесть и преодоление предрассудков"},
+      {canon:46, rot:24, cat:"VII. Фундаментальный нон-фикшн", author:"Платон / Марк Аврелий", title:"Государство / Наедине с собой", year:"II в.", diff:3, hours:10, trans:"пер. А. Н. Егунова / С. М. Роговина", litres:"Текст: Азбука-Классика | Аудио: В. Максимов / Н. Петров", idea:"Модель справедливого общества и практика стоицизма"},
+      {canon:4, rot:25, cat:"I. Античность и Ренессанс", author:"Уильям Шекспир", title:"Гамлет и Король Лир", year:"1603", diff:3, hours:6, trans:"пер. Б. Л. Пастернака и М. Л. Лозинского", litres:"Текст: Азбука-Классика | Аудио: Радиоспектакли Гостелерадиофонда", idea:"Природа власти, сомнения, предательства и рока"},
+      {canon:38, rot:26, cat:"V. Постмодерн и магический реализм", author:"Джон Р. Р. Толкин", title:"Властелин колец", year:"1954", diff:3, hours:36, trans:"пер. В. Муравьёва и А. Кистяковского (или Каменкович/Каррик)", litres:"Текст: АСТ | Аудио: И. Князев", idea:"Искушение абсолютной властью и цена малого выбора"},
+      {canon:27, rot:27, cat:"IV. XX век: экзистенциализм и модернизм", author:"Франц Кафка", title:"Процесс", year:"1925", diff:3, hours:6, trans:"пер. Р. Я. Райт-Ковалёвой", litres:"Текст: АСТ / Азбука | Аудио: И. Князев / А. Клюквин", idea:"Абсурд бюрократической машины и экзистенциальная вина"},
+      {canon:16, rot:28, cat:"III. Мировая классика XIX в.", author:"Джейн Остин", title:"Гордость и предубеждение", year:"1813", diff:2, hours:9, trans:"пер. И. С. Маршака", litres:"Текст: Азбука-Классика / АСТ | Аудио: М. Багинская / А. Лазарева", idea:"Преодоление предубеждений и социальных масок"},
+      {canon:9, rot:29, cat:"II. Русская классика", author:"Николай Гоголь", title:"Мёртвые души", year:"1842", diff:3, hours:10, trans:"Полная ред. 1-го и глав 2-го тома", litres:"Текст: Азбука | Аудио: А. Клюквин", idea:"Сатирическая анатомия социальных типажей"},
+      {canon:41, rot:30, cat:"V. Постмодерн и магический реализм", author:"Умберто Эко", title:"Имя розы", year:"1980", diff:4, hours:16, trans:"пер. Е. А. Костюкович (с Заметками на полях)", litres:"Текст: Corpus / АСТ | Аудио: С. Чонишвили / К. Радциг", idea:"Семиотика, детективный метод и борьба за доступ к знанию"},
+      {canon:15, rot:31, cat:"II. Русская классика", author:"Антон Чехов", title:"Избранные рассказы и пьесы", year:"1904", diff:2, hours:8, trans:"Сборник зрелой прозы и пьес", litres:"Текст: Азбука-Классика | Аудио: А. Клюквин / А. Багдасаров", idea:"Точная диагностика человеческих самообманов"},
+      {canon:17, rot:32, cat:"III. Мировая классика XIX в.", author:"Стендаль", title:"Красное и чёрное", year:"1830", diff:3, hours:14, trans:"пер. С. П. Боброва и М. П. Богословской", litres:"Текст: Азбука-Классика | Аудио: И. Литвинов", idea:"Анатомия тщеславия и социальных лифтов"},
+      {canon:1, rot:33, cat:"I. Античность и Ренессанс", author:"Гомер", title:"Одиссея", year:"VIII в. до н.э.", diff:4, hours:11, trans:"пер. В. А. Жуковского или В. В. Вересаева", litres:"Текст: Азбука-Классика | Аудио: И. Прудовский / В. Самойлов", idea:"Возвращение домой и гибкость ума против хаоса"},
+      {canon:20, rot:34, cat:"III. Мировая классика XIX в.", author:"Гюстав Флобер", title:"Госпожа Бовари", year:"1857", diff:3, hours:10, trans:"пер. Н. М. Любимова", litres:"Текст: Азбука-Классика | Аудио: И. Литвинов", idea:"Цена подмены реальной жизни романтическими иллюзиями"},
+      {canon:12, rot:35, cat:"II. Русская классика", author:"Фёдор Достоевский", title:"Братья Карамазовы", year:"1880", diff:4, hours:24, trans:"Полная академическая ред.", litres:"Текст: Азбука-Классика | Аудио: А. Клюквин", idea:"Свобода воли, вера, бунт и моральная ответственность"},
+      {canon:21, rot:36, cat:"III. Мировая классика XIX в.", author:"Чарльз Диккенс", title:"Большие надежды", year:"1861", diff:2, hours:13, trans:"пер. М. Ф. Лорие", litres:"Текст: Азбука-Классика | Аудио: А. Багдасаров / И. Литвинов", idea:"Взросление и переосмысление ложных критериев успеха"},
+      {canon:39, rot:37, cat:"V. Постмодерн и магический реализм", author:"Джозеф Хеллер", title:"Уловка-22", year:"1961", diff:3, hours:15, trans:"пер. М. Виленского и В. Титова", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: К. Радциг", idea:"Логические ловушки бюрократических и военных систем"},
+      {canon:30, rot:38, cat:"IV. XX век: экзистенциализм и модернизм", author:"Джон Стейнбек", title:"Гроздья гнева", year:"1939", diff:3, hours:14, trans:"пер. Н. А. Волжиной", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: И. Князев", idea:"Достоинство и солидарность людей в экономическом крахе"},
+      {canon:6, rot:39, cat:"I. Античность и Ренессанс", author:"Иоганн Вольфганг фон Гёте", title:"Фауст", year:"1808", diff:4, hours:10, trans:"пер. Б. Л. Пастернака или Н. А. Холодковского", litres:"Текст: Азбука-Классика / АСТ | Аудио: Д. Некрасов / В. Смехов", idea:"Сделка разума с искушением ради познания"},
+      {canon:13, rot:40, cat:"II. Русская классика", author:"Лев Толстой", title:"Война и мир", year:"1869", diff:4, hours:45, trans:"Издание с постраничным пер. французского текста", litres:"Текст: Азбука / Эксмо | Аудио: А. Клюквин / И. Прудовский", idea:"Частная жизнь человека и законы движения истории"},
+      {canon:5, rot:41, cat:"I. Античность и Ренессанс", author:"Мишель де Монтень", title:"Опыты", year:"1580", diff:3, hours:18, trans:"пер. А. С. Бобовича и др. (Литературные памятники)", litres:"Текст: Азбука | Аудио: С. Федосов", idea:"Критический скептицизм и честный самоанализ"},
+      {canon:36, rot:42, cat:"V. Постмодерн и магический реализм", author:"Владимир Набоков", title:"Дар / Лолита", year:"1938", diff:4, hours:11, trans:"Авторский текст с комм. А. Долинина", litres:"Текст: Азбука / Corpus | Аудио: А. Багдасаров", idea:"Виртуозность языка и феномен ненадежного рассказчика"},
+      {canon:19, rot:43, cat:"III. Мировая классика XIX в.", author:"Герман Мелвилл", title:"Моби Дик", year:"1851", diff:4, hours:16, trans:"пер. И. М. Бернштейн", litres:"Текст: Азбука-Классика / Эксмо | Аудио: В. Левашёв", idea:"Разрушительная одержимость целью и борьба со стихией"},
+      {canon:48, rot:44, cat:"VII. Фундаментальный нон-фикшн", author:"Чарльз Дарвин", title:"Происхождение видов", year:"1859", diff:4, hours:15, trans:"пер. К. А. Тимирязева (под ред. Н. И. Вавилова)", litres:"Текст: Эксмо / АСТ | Аудио: И. Букчин", idea:"Естественный отбор и эволюция сложных систем"},
+      {canon:22, rot:45, cat:"III. Мировая классика XIX в.", author:"Виктор Гюго", title:"Отверженные", year:"1862", diff:3, hours:38, trans:"пер. К. Локса, Д. Лившиц, Б. Кокорина", litres:"Текст: Азбука / Иностранка | Аудио: Г. Самойлов / И. Литвинов", idea:"Справедливость, закон и преображающая сила милосердия"},
+      {canon:2, rot:46, cat:"I. Античность и Ренессанс", author:"Данте Алигьери", title:"Божественная комедия", year:"1321", diff:5, hours:14, trans:"пер. и комм. М. Л. Лозинского", litres:"Текст: Азбука / Эксмо | Аудио: В. Левашёв", idea:"Архитектура средневековой этики и мироздания"},
+      {canon:3, rot:47, cat:"I. Античность и Ренессанс", author:"Мигель де Сервантес", title:"Дон Кихот", year:"1605", diff:3, hours:28, trans:"пер. Н. М. Любимова (стихи М. Лозинского)", litres:"Текст: Азбука-Классика | Аудио: А. Клюквин / К. Радциг", idea:"Столкновение идеализма с прагматичной реальностью"},
+      {canon:26, rot:48, cat:"IV. XX век: экзистенциализм и модернизм", author:"Томас Манн", title:"Волшебная гора", year:"1924", diff:4, hours:24, trans:"пер. В. Станевич и В. Куреллы", litres:"Текст: АСТ (Эксклюзивная классика) | Аудио: А. Багдасаров", idea:"Интеллектуальный спор идеологий Европы перед катастрофой"},
+      {canon:24, rot:49, cat:"IV. XX век: экзистенциализм и модернизм", author:"Марсель Пруст", title:"В сторону Свана", year:"1913", diff:5, hours:14, trans:"пер. Е. В. Баевской или Н. М. Любимова", litres:"Текст: Азбука-Классика / Эксмо | Аудио: К. Радциг", idea:"Механизмы непроизвольной памяти и субъективного времени"},
+      {canon:25, rot:50, cat:"IV. XX век: экзистенциализм и модернизм", author:"Джеймс Джойс", title:"Улисс (или Дублинцы)", year:"1922", diff:5, hours:25, trans:"пер. В. А. Хинкиса и С. С. Хоружего (с комм.)", litres:"Текст: Азбука-Классика | Аудио: В. Максимов", idea:"Поток сознания и одиссея одного обычного дня"}
+    ];
+
+    var STORAGE_KEY = "sergey_canon50_state_v1";
+    var userState = {};
+    var currentView = "cards";
+
+    function safeGet(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSet(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    try {
+      var raw = safeGet(STORAGE_KEY);
+      if (raw) userState = JSON.parse(raw);
+      var savedView = safeGet("sergey_canon50_view");
+      if (savedView) currentView = savedView;
+      var savedTheme = safeGet("sergey_canon50_theme");
+      if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+    } catch (e) {
+      userState = {};
+    }
+
+    function saveState() {
+      safeSet(STORAGE_KEY, JSON.stringify(userState));
+      updateStats();
+    }
+
+    function getBookState(canonId) {
+      if (!userState[canonId]) {
+        userState[canonId] = { status: "Не начато", rating: 0, note: "" };
+      }
+      return userState[canonId];
+    }
+
+    function setView(v) {
+      currentView = v;
+      safeSet("sergey_canon50_view", v);
+      document.getElementById("viewCardsBtn").className = (v === "cards") ? "active-view" : "";
+      document.getElementById("viewTableBtn").className = (v === "table") ? "active-view" : "";
+      renderBooks();
+    }
+
+    function setStatus(canonId, val) {
+      getBookState(canonId).status = val;
+      saveState();
+      renderBooks();
+    }
+
+    function setRating(canonId, stars) {
+      var st = getBookState(canonId);
+      st.rating = (st.rating === stars) ? 0 : stars;
+      saveState();
+      renderBooks();
+    }
+
+    function setNote(canonId, text) {
+      getBookState(canonId).note = text;
+      saveState();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function updateStats() {
+      var readCount = 0, readingCount = 0, readHours = 0, totalHours = 0;
+      var ratedSum = 0, ratedCount = 0;
+      var nextBook = null;
+
+      var sortedByRot = BOOKS.slice().sort(function(a, b) { return a.rot - b.rot; });
+      for (var i = 0; i < sortedByRot.length; i++) {
+        var b = sortedByRot[i];
+        totalHours += b.hours;
+        var st = getBookState(b.canon);
+        if (st.status === "Прочитано") {
+          readCount++;
+          readHours += b.hours;
+        } else if (st.status === "Читаю") {
+          readingCount++;
+        } else if (!nextBook) {
+          nextBook = b;
+        }
+        if (st.rating > 0) {
+          ratedSum += st.rating;
+          ratedCount++;
+        }
+      }
+
+      document.getElementById("statRead").innerText = readCount + " / 50";
+      document.getElementById("statBar").style.width = ((readCount / 50) * 100) + "%";
+      document.getElementById("statReading").innerText = String(readingCount);
+      document.getElementById("statNextBook").innerText = nextBook
+        ? ("Следующая (#" + nextBook.rot + "): " + nextBook.title)
+        : "Весь канон прочитан!";
+      document.getElementById("statHours").innerText = readHours + " / " + totalHours + " ч";
+      document.getElementById("statRating").innerText = ratedCount > 0
+        ? ((ratedSum / ratedCount).toFixed(1) + " ★")
+        : "— ★";
+    }
+
+    function renderBooks() {
+      var q = document.getElementById("searchInput").value.toLowerCase().trim();
+      var cat = document.getElementById("catFilter").value;
+      var stFilter = document.getElementById("statusFilter").value;
+      var sort = document.getElementById("sortFilter").value;
+
+      var list = [];
+      for (var i = 0; i < BOOKS.length; i++) {
+        var b = BOOKS[i];
+        var st = getBookState(b.canon);
+        if (cat !== "all" && b.cat !== cat) continue;
+        if (stFilter !== "all" && st.status !== stFilter) continue;
+        if (q) {
+          var hay = (b.title + " " + b.author + " " + b.idea + " " + b.trans + " " + b.litres + " " + st.note).toLowerCase();
+          if (hay.indexOf(q) === -1) continue;
+        }
+        list.push(b);
+      }
+
+      list.sort(function(a, b) {
+        if (sort === "rotation") return a.rot - b.rot;
+        if (sort === "canon") return a.canon - b.canon;
+        if (sort === "hoursAsc") return a.hours - b.hours;
+        if (sort === "diffAsc") return a.diff - b.diff;
+        return 0;
+      });
+
+      var host = document.getElementById("mainView");
+      var html = "";
+
+      if (currentView === "table") {
+        html += '<div class="table-wrap"><table><thead><tr>';
+        html += '<th>Ротация</th><th>Канон</th><th>Блок</th><th>Автор и Название</th>';
+        html += '<th>Сложн.</th><th>Время</th><th>Перевод / Редакция</th><th>Что брать на ЛитРес</th>';
+        html += '<th>Ключевая идея</th><th>Статус и Оценка</th><th>Мои заметки</th>';
+        html += '</tr></thead><tbody>';
+
+        for (var j = 0; j < list.length; j++) {
+          var bk = list[j];
+          var stT = getBookState(bk.canon);
+          var rowCls = stT.status === "Прочитано" ? "row-done" : (stT.status === "Читаю" ? "row-reading" : "");
+          var selCls = stT.status === "Прочитано" ? "val-done" : (stT.status === "Читаю" ? "val-reading" : "");
+          var litresUrl = "https://www.litres.ru/search/?q=" + encodeURIComponent(bk.author + " " + bk.title);
+          var starsHtml = "";
+          for (var s = 1; s <= 5; s++) {
+            starsHtml += '<span class="star ' + (s <= stT.rating ? 'active' : '') + '" onclick="setRating(' + bk.canon + ',' + s + ')">★</span>';
+          }
+          html += '<tr class="' + rowCls + '">';
+          html += '<td><span class="badge badge-rot">#' + bk.rot + '</span></td>';
+          html += '<td>#' + bk.canon + '</td>';
+          html += '<td>' + escapeHtml(bk.cat) + '</td>';
+          html += '<td><strong>' + escapeHtml(bk.title) + '</strong> (' + escapeHtml(bk.year) + ')<br><span style="color:var(--accent)">' + escapeHtml(bk.author) + '</span></td>';
+          html += '<td>' + bk.diff + '/5</td>';
+          html += '<td>' + bk.hours + ' ч</td>';
+          html += '<td>' + escapeHtml(bk.trans) + '</td>';
+          html += '<td>' + escapeHtml(bk.litres) + '<br><a class="litres-link" style="margin-top:6px" href="' + litresUrl + '" target="_blank" rel="noopener">ЛитРес ↗</a></td>';
+          html += '<td>' + escapeHtml(bk.idea) + '</td>';
+          html += '<td><select class="status-select ' + selCls + '" onchange="setStatus(' + bk.canon + ', this.value)">';
+          html += '<option value="Не начато"' + (stT.status === "Не начато" ? " selected" : "") + '>⏳ Не начато</option>';
+          html += '<option value="Читаю"' + (stT.status === "Читаю" ? " selected" : "") + '>📖 Читаю</option>';
+          html += '<option value="Прочитано"' + (stT.status === "Прочитано" ? " selected" : "") + '>✅ Прочитано</option>';
+          html += '</select><div class="stars" style="margin-top:6px">' + starsHtml + '</div></td>';
+          html += '<td><textarea class="note-input" style="min-width:180px" placeholder="Заметки..." oninput="setNote(' + bk.canon + ', this.value)">' + escapeHtml(stT.note) + '</textarea></td>';
+          html += '</tr>';
+        }
+        html += '</tbody></table></div>';
+      } else {
+        html += '<div class="cards-grid">';
+        for (var k = 0; k < list.length; k++) {
+          var bc = list[k];
+          var stC = getBookState(bc.canon);
+          var cardClass = stC.status === "Прочитано" ? "status-done" : (stC.status === "Читаю" ? "status-reading" : "");
+          var selClass = stC.status === "Прочитано" ? "val-done" : (stC.status === "Читаю" ? "val-reading" : "");
+          var lUrl = "https://www.litres.ru/search/?q=" + encodeURIComponent(bc.author + " " + bc.title);
+          var stHtml = "";
+          for (var m = 1; m <= 5; m++) {
+            stHtml += '<span class="star ' + (m <= stC.rating ? 'active' : '') + '" onclick="setRating(' + bc.canon + ',' + m + ')">★</span>';
+          }
+          html += '<div class="book-card ' + cardClass + '">';
+          html += '<div><div class="badges">';
+          html += '<span class="badge badge-rot">Ротация #' + bc.rot + '</span>';
+          html += '<span class="badge">Канон #' + bc.canon + '</span>';
+          html += '<span class="badge">Сложность: ' + bc.diff + '/5</span>';
+          html += '<span class="badge">⏱ ' + bc.hours + ' ч</span>';
+          html += '</div>';
+          html += '<div class="book-title">' + escapeHtml(bc.title) + ' <span style="font-weight:400;font-size:0.85rem;color:var(--text-muted)">(' + escapeHtml(bc.year) + ')</span></div>';
+          html += '<div class="book-author">' + escapeHtml(bc.author) + ' • <span style="color:var(--text-muted);font-weight:500">' + escapeHtml(bc.cat) + '</span></div></div>';
+          html += '<div class="book-idea">' + escapeHtml(bc.idea) + '</div>';
+          html += '<div class="meta-box"><div><strong>Эталонный перевод / ред.:</strong> ' + escapeHtml(bc.trans) + '</div>';
+          html += '<div><strong>Что брать на ЛитРес:</strong> ' + escapeHtml(bc.litres) + '</div></div>';
+          html += '<div class="card-controls"><div class="control-row">';
+          html += '<select class="status-select ' + selClass + '" onchange="setStatus(' + bc.canon + ', this.value)">';
+          html += '<option value="Не начато"' + (stC.status === "Не начато" ? " selected" : "") + '>⏳ Не начато</option>';
+          html += '<option value="Читаю"' + (stC.status === "Читаю" ? " selected" : "") + '>📖 Читаю</option>';
+          html += '<option value="Прочитано"' + (stC.status === "Прочитано" ? " selected" : "") + '>✅ Прочитано</option>';
+          html += '</select>';
+          html += '<div class="stars">' + stHtml + '</div>';
+          html += '<a class="litres-link" href="' + lUrl + '" target="_blank" rel="noopener">ЛитРес ↗</a>';
+          html += '</div>';
+          html += '<textarea class="note-input" placeholder="Мои заметки, цитаты и впечатления..." oninput="setNote(' + bc.canon + ', this.value)">' + escapeHtml(stC.note) + '</textarea>';
+          html += '</div></div>';
+        }
+        html += '</div>';
+      }
+
+      host.innerHTML = html;
+      updateStats();
+    }
+
+    function toggleTheme() {
+      var root = document.documentElement;
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      safeSet("sergey_canon50_theme", next);
+    }
+
+    function exportBackup() {
+      var blob = new Blob([JSON.stringify(userState, null, 2)], {type: "application/json"});
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "canon-50-backup.json";
+      a.click();
+    }
+
+    function importBackup(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          userState = JSON.parse(ev.target.result);
+          saveState();
+          renderBooks();
+        } catch (err) {
+          alert("Ошибка чтения файла бэкапа");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    setView(currentView);
+  </script>
+</body>
+</html>
